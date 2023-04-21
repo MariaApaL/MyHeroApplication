@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SuperheroLab</string>
+    <string name="button">Bienvenido</string>
+    <string name="start">Comenzar</string>
+    <string name="favourite">Favoritos</string>
+    <string name="search">Buscar</string>
+</resources>
