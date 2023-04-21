@@ -3,7 +3,7 @@ package com.apa.accenture.myandroidstudioapp.ui.view.details
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.apa.accenture.myandroidstudioapp.core.NetworkModule
+import com.apa.accenture.myandroidstudioapp.di.NetworkModule
 import com.apa.accenture.myandroidstudioapp.data.network.model.SuperheroDetailsModel
 import com.apa.accenture.myandroidstudioapp.databinding.ActivityDetailsBinding
 import com.squareup.picasso.Picasso

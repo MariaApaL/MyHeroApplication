@@ -1,4 +1,4 @@
-package com.apa.accenture.myandroidstudioapp.core
+package com.apa.accenture.myandroidstudioapp.di
 
 import com.apa.accenture.myandroidstudioapp.data.network.SuperheroApi
 import dagger.Module
