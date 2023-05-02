@@ -37,5 +37,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-
+<!--    <include layout="@layout/bottom_layout"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

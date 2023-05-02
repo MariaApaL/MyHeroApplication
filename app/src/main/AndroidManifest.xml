@@ -17,9 +17,7 @@
         <activity
             android:name=".ui.view.search.SearchActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.view.menu.MenuActivity"
-            android:exported="false" />
+
         <activity
             android:name=".ui.view.favourites.FavActivity"
             android:exported="false" />

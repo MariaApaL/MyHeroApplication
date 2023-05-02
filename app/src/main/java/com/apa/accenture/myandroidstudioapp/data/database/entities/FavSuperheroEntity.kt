@@ -6,8 +6,9 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "favourite_superhero")
+@Entity(tableName = "favorite_superhero")
 data class FavSuperheroEntity (
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "superheroId") val id: String
+
 )

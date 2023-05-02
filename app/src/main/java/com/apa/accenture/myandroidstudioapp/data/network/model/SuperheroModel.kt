@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class SuperheroModel(
 
-@SerializedName("response") val response: String,
 @SerializedName("results") val superheroes: List<SuperheroResponse>
 )
 

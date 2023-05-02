@@ -2,20 +2,51 @@ package com.apa.accenture.myandroidstudioapp.ui.view.search.adapterviewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.viewModels
+
 import androidx.recyclerview.widget.RecyclerView
+import com.apa.accenture.myandroidstudioapp.data.database.dao.FavSuperheroDAO
+import com.apa.accenture.myandroidstudioapp.data.database.entities.FavSuperheroEntity
 import com.apa.accenture.myandroidstudioapp.databinding.SuperheroItemBinding
 import com.apa.accenture.myandroidstudioapp.data.network.model.SuperheroResponse
+import com.apa.accenture.myandroidstudioapp.ui.viewmodel.SearchViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SuperheroAdapter(var superheroList: List<SuperheroResponse> = emptyList(),
-                       private val onItemSelected: (String) -> Unit
-): RecyclerView.Adapter<SuperheroViewHolder>() {
+class SuperheroAdapter @Inject constructor( private val onFavSelected: (String)->Unit ,
+                                           var superheroList: List<SuperheroResponse> = emptyList(),
+                                           private val onItemSelected: (String) -> Unit,
+                                            private val superheroViewModel: SearchViewModel,
+)
+    : RecyclerView.Adapter<SuperheroViewHolder>() {
+//
+//    private var favDao: FavSuperheroDAO
 
 //    para actualizar la lista de datos que se
 //    muestra en el RecyclerView y refrescar la vista para mostrar los cambios.
+   private var favoriteIds: MutableList<String> = mutableListOf()
+
+
+//    private fun onFavItemSelected(superheroId: String) {
+//        onNavigateToFav(superheroId)
+//        onFavSelected(superheroId)
+//    }
+
 
     fun updateList(list: List<SuperheroResponse>){
         this.superheroList = list
+
         notifyDataSetChanged()
+    }
+
+    fun addFavorite(id: String) {
+        if (!favoriteIds.contains(id)) {
+            favoriteIds.add(id)
+            superheroViewModel.updateFavoriteIds(favoriteIds)
+            notifyDataSetChanged()
+        }
     }
 
 // se encarga de crear una nueva instancia del ViewHolder que se usará para mostrar
@@ -36,8 +67,22 @@ class SuperheroAdapter(var superheroList: List<SuperheroResponse> = emptyList(),
     }
 
     override fun onBindViewHolder(viewholder: SuperheroViewHolder, position: Int) {
-        viewholder.bind(superheroList[position],onItemSelected)
+        var superhero = superheroList[position]
+        viewholder.bind(superhero,onItemSelected, onFavSelected, favoriteIds)
+
+        viewholder.binding.tbFav.setOnClickListener {
+            val isFavorite = favoriteIds.contains(superhero.superheroId)
+            if (isFavorite) {
+                favoriteIds.remove(superhero.superheroId)
+            } else {
+                favoriteIds.add(superhero.superheroId)
+            }
+            viewholder.binding.tbFav.isChecked = !isFavorite
+            superheroViewModel.updateFavoriteIds(favoriteIds)
+
+        }
+
+        }
 
     }
 
-}

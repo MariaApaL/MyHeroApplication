@@ -3,6 +3,7 @@ package com.apa.accenture.myandroidstudioapp.ui.view.details
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.isVisible
 import com.apa.accenture.myandroidstudioapp.di.NetworkModule
 import com.apa.accenture.myandroidstudioapp.data.network.model.SuperheroDetailsModel
 import com.apa.accenture.myandroidstudioapp.databinding.ActivityDetailsBinding
@@ -38,6 +39,7 @@ class DetailsActivity : AppCompatActivity() {
 
 
     private fun getSuperheroInformation(id: String) {
+        binding.progressBar.isVisible = true;
         CoroutineScope(Dispatchers.IO).launch {
             val superheroDetail: Response<SuperheroDetailsModel> =
                 retrofitApi.getSuperheroesDetails(id)
@@ -50,6 +52,7 @@ class DetailsActivity : AppCompatActivity() {
                     Log.i("maria",response.toString())
                     runOnUiThread {
                         createdUI(response!!)
+                        binding.progressBar.isVisible = false
                     }
 
 
