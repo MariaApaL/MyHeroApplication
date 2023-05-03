@@ -1,5 +1,6 @@
 package com.apa.accenture.myandroidstudioapp.domain.model
 
+import com.apa.accenture.myandroidstudioapp.data.database.entities.FavSuperheroEntity
 import com.apa.accenture.myandroidstudioapp.data.network.model.Publisher
 import com.apa.accenture.myandroidstudioapp.data.network.model.SuperheroImageResponse
 import com.apa.accenture.myandroidstudioapp.data.network.model.SuperheroModel
@@ -16,4 +17,8 @@ data class Superhero(
 
 fun SuperheroResponse.toDomain() =
    Superhero(superheroId= superheroId,
+      name=name,superheroImage = superheroImage, biography= biography)
+
+fun FavSuperheroEntity.toDomain() =
+   Superhero(superheroId= id,
       name=name,superheroImage = superheroImage, biography= biography)

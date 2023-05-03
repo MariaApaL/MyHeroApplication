@@ -17,9 +17,12 @@ interface  FavSuperheroDAO{
      fun deleteFavoriteSuperhero(favoriteSuperhero: FavSuperheroEntity)
     //Enlista los superheroes por id
     @Query("SELECT * FROM favorite_superhero")
-    fun getFavoriteSuperheroIds(): List<String>
+    fun getFavoriteSuperheroIds(): List<FavSuperheroEntity>
 
     @Query("SELECT * FROM favorite_superhero WHERE superheroId = :superheroId")
     fun getFavoriteSuperheroById(superheroId: String): FavSuperheroEntity?
+
+    @Query("SELECT (SELECT COUNT(*) FROM favorite_superhero WHERE superheroId =:superheroId) == 1 ")
+    fun isFav(superheroId:String):Boolean
 
 }

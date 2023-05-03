@@ -10,18 +10,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.apa.accenture.myandroidstudioapp.data.database.entities.FavSuperheroEntity
 
 import com.apa.accenture.myandroidstudioapp.di.NetworkModule
 import com.apa.accenture.myandroidstudioapp.databinding.ActivitySearchBinding
 import com.apa.accenture.myandroidstudioapp.ui.view.details.DetailsActivity
 import com.apa.accenture.myandroidstudioapp.ui.view.search.adapterviewholder.SuperheroAdapter
 import com.apa.accenture.myandroidstudioapp.data.network.model.SuperheroModel
-import com.apa.accenture.myandroidstudioapp.databinding.BottomLayoutBinding
-import com.apa.accenture.myandroidstudioapp.databinding.SuperheroItemBinding
-import com.apa.accenture.myandroidstudioapp.ui.view.MainActivity
 import com.apa.accenture.myandroidstudioapp.ui.view.details.DetailsActivity.Companion.EXTRA_ID
-import com.apa.accenture.myandroidstudioapp.ui.view.favourites.FavActivity
-import com.apa.accenture.myandroidstudioapp.ui.view.favourites.FavActivity.Companion.FAV_ID
+
 import com.apa.accenture.myandroidstudioapp.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -89,17 +86,8 @@ class SearchActivity @Inject constructor(): AppCompatActivity() {
 
     private fun initUI(){
 
-        adapter = SuperheroAdapter(
-            onFavSelected = { superheroId ->
-                adapter.addFavorite(superheroId)
-
-            },
-            onItemSelected = { superheroId ->
-                navigateToDetail(superheroId)
-            },
-            superheroViewModel = superheroViewModel,
-
-        )
+        adapter = SuperheroAdapter(emptyList(),this::navigateToDetail,
+             this::isFav, this::insertFav,this::deleteFav)
         binding.rvSuperhero.setHasFixedSize(true)
         binding.rvSuperhero.layoutManager = LinearLayoutManager(this)
         binding.rvSuperhero.adapter = adapter
@@ -107,7 +95,7 @@ class SearchActivity @Inject constructor(): AppCompatActivity() {
         binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener
         {
             override fun onQueryTextSubmit(query: String?): Boolean {
-//                superheroViewModel.searchSuperhero(query.orEmpty())
+
                 searchSuperhero(query.orEmpty())
                 return false
             }
@@ -166,7 +154,16 @@ class SearchActivity @Inject constructor(): AppCompatActivity() {
 //        startActivity(intent)
 //    }
 
+    private suspend  fun isFav(id:String):Boolean{
+      return  superheroViewModel.isFav(id)
+    }
 
+   private suspend fun insertFav(fav:FavSuperheroEntity){
+       return superheroViewModel.insertFav(fav)
+   }
 
+    private suspend fun deleteFav(fav:FavSuperheroEntity){
+        return superheroViewModel.deleteFavorite(fav)
+    }
 
 }

@@ -43,12 +43,17 @@ class SuperheroRepository @Inject constructor(
        favSuperheroDAO.deleteFavoriteSuperhero(fav)
     }
 
-    suspend fun getFavoriteSuperheroIds():List<String> {
-        return favSuperheroDAO.getFavoriteSuperheroIds()
+    suspend fun getFavoriteSuperheroIds():List<Superhero> {
+        val response = favSuperheroDAO.getFavoriteSuperheroIds()
+        return response.map { it.toDomain() }
     }
 
     suspend fun getFavoriteSuperheroById(superheroId:String):FavSuperheroEntity?{
         return favSuperheroDAO.getFavoriteSuperheroById(superheroId)
+    }
+
+    suspend fun isFav(superheroId:String):Boolean{
+        return favSuperheroDAO.isFav(superheroId)
     }
 
 }

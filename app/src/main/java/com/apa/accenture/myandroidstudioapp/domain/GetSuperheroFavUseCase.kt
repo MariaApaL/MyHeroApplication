@@ -11,7 +11,7 @@ import kotlin.collections.List
 
 class GetSuperheroFavUseCase @Inject constructor(private val repository: SuperheroRepository) {
 
-    suspend operator fun invoke(): List<String> {
+    suspend operator fun invoke(): List<Superhero> {
         return repository.getFavoriteSuperheroIds()
     }
 

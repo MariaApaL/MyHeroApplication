@@ -7,10 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.apa.accenture.myandroidstudioapp.data.SuperheroRepository
 import com.apa.accenture.myandroidstudioapp.data.database.dao.FavSuperheroDAO
 import com.apa.accenture.myandroidstudioapp.data.database.entities.FavSuperheroEntity
-import com.apa.accenture.myandroidstudioapp.domain.DeleteSuperheroFav
-import com.apa.accenture.myandroidstudioapp.domain.GetSuperHeroFavByIdUseCase
-import com.apa.accenture.myandroidstudioapp.domain.InsertSuperheroFavUseCase
-import com.apa.accenture.myandroidstudioapp.domain.GetSuperheroUseCase
+import com.apa.accenture.myandroidstudioapp.domain.*
 import com.apa.accenture.myandroidstudioapp.domain.model.Superhero
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,44 +16,43 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
 
-    private val getSuperhero: GetSuperheroUseCase,
-    private val getSuperheroFav: InsertSuperheroFavUseCase,
-    private val getSuperHeroFavById: GetSuperHeroFavByIdUseCase,
-    private val deleteFav: DeleteSuperheroFav,
+
+    private val isFavUseCase: isFavUseCase,
+    private val getSuperheroFavUseCase: GetSuperheroFavUseCase,
+
+    private val deleteFav:DeleteSuperheroFav,
     private val insertSuperhero: InsertSuperheroFavUseCase,
     private val superheroRepository: SuperheroRepository,
-    private val favDao: FavSuperheroDAO
+
 
 ) : ViewModel() {
 
-    val isLoading = MutableLiveData<Boolean>()
-    val superheroModel: List<Superhero> = emptyList()
-    val responseLiveData = MutableLiveData<List<Superhero>>()
-    private val favoriteIdsList = MutableLiveData<List<String>>()
+        var favList = MutableLiveData<List<Superhero>>()
+        val isLoading= MutableLiveData<Boolean>()
 
+    suspend fun isFav(superheroId: String):Boolean{
 
-    fun getFavoriteIds(): LiveData<List<String>> {
-        return favoriteIdsList
+      return  isFavUseCase(superheroId)
     }
 
-
-    fun updateFavoriteIds(ids: List<String>) {
-        favoriteIdsList.value = ids
+   suspend fun insertFav(favSuperhero: FavSuperheroEntity){
+        insertSuperhero(favSuperhero)
     }
 
-//    fun searchSuperhero(query: String) {
-//        isLoading.postValue(true)
-//        viewModelScope.launch {
-//            val result = getSuperhero(query)
-//            if(result.isEmpty()){
-//                responseLiveData.postValue(emptyList())
-//            }
-//            responseLiveData.postValue(result)
-//            isLoading.postValue(false)
-//        }
-//    }
+    suspend fun deleteFavorite(favSuperhero: FavSuperheroEntity){
+        deleteFav(favSuperhero)
+    }
 
+    fun getFav(){
+        viewModelScope.launch {
+            isLoading.postValue(true)
+            val list = getSuperheroFavUseCase()
+            favList.postValue(list)
 
+            isLoading.postValue(false)
+        }
+
+    }
 
 
 
